@@ -16,7 +16,6 @@ import {
   Send,
   Package
 } from 'lucide-react';
-import { isSupabaseConfigured } from '../lib/supabase';
 
 export type NavTab = 
   | 'home' 
@@ -52,8 +51,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     { id: 'packages', label: 'Tour Packages' },
     { id: 'festivals', label: 'Festivals & Experiences', isBadge: true },
     { id: 'about', label: 'About Us' },
-    { id: 'contact', label: 'Contact & Inquire' },
-    { id: 'admin', label: 'Admin', icon: <Lock className="w-3 h-3 text-stone-400" /> }
+    { id: 'contact', label: 'Contact & Inquire' }
   ];
 
   const handleNavClick = (tab: NavTab) => {

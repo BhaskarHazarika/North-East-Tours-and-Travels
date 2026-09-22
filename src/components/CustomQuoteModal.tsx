@@ -19,6 +19,7 @@ export const CustomQuoteModal: React.FC<CustomQuoteModalProps> = ({ isOpen, onCl
   const [vehicleType, setVehicleType] = useState<VehicleTypeId>('suv');
   const [travelMonth, setTravelMonth] = useState('December (Hornbill Festival)');
   const [notes, setNotes] = useState('');
+  const [bookingRef, setBookingRef] = useState<string>('');
   const [submitted, setSubmitted] = useState(false);
 
   if (!isOpen) return null;
@@ -35,7 +36,27 @@ export const CustomQuoteModal: React.FC<CustomQuoteModalProps> = ({ isOpen, onCl
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const refId = 'NEO-REQ-' + Math.floor(100000 + Math.random() * 900000);
+    setBookingRef(refId);
     setSubmitted(true);
+
+    const selectedVeh = VEHICLE_TARIFFS.find(v => v.id === vehicleType);
+    const msg = `Hi North East Odyssey! Custom Trip Request:
+*Reference ID:* ${refId}
+*States:* ${selectedStates.join(', ')}
+*Duration:* ${duration}
+*Month:* ${travelMonth}
+*Budget Tier:* ${budgetTier}
+*Vehicle:* ${selectedVeh?.name || vehicleType}
+*Traveler:* ${name || 'Guest'} (${phone || email})
+*Notes:* ${notes || 'None'}`;
+
+    const waUrl = `https://wa.me/919395109412?text=${encodeURIComponent(msg)}`;
+    try {
+      window.open(waUrl, '_blank', 'noopener,noreferrer');
+    } catch (err) {
+      console.warn('Pop-up blocked, fallback link available in modal', err);
+    }
   };
 
   const getWhatsAppLink = () => {
@@ -263,12 +284,21 @@ Notes: ${notes || 'None'}`;
               </div>
               <h4 className="text-lg font-bold text-stone-900">Custom Itinerary Inquiry Received!</h4>
               <p className="text-xs text-stone-600 max-w-sm mx-auto">
-                We have received your request for {selectedStates.join(', ')}. Our senior North East trip specialist will assemble a customized day-by-day itinerary and estimated quote for you.
+                We have received your request for <strong>{selectedStates.join(', ')}</strong> under Reference ID <code className="bg-stone-100 px-1.5 py-0.5 rounded text-stone-800 font-mono font-bold text-xs">{bookingRef}</code>.
               </p>
-              <div className="pt-3">
+              <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-2">
+                <a
+                  href={`https://wa.me/919395109412?text=${encodeURIComponent(`Hi North East Odyssey, I just submitted a custom itinerary request (Ref: ${bookingRef}) for ${selectedStates.join(', ')}. My name is ${name || 'Guest'}.`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-4 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold flex items-center gap-1.5 shadow-sm"
+                >
+                  <MessageCircle className="w-4 h-4" />
+                  <span>Send on WhatsApp</span>
+                </a>
                 <button
                   onClick={onClose}
-                  className="px-5 py-2 rounded-xl bg-stone-900 text-white text-xs font-bold cursor-pointer"
+                  className="px-4 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-800 text-xs font-bold cursor-pointer"
                 >
                   Done
                 </button>

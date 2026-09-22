@@ -10,16 +10,12 @@ import {
   HelpCircle, 
   ShieldCheck, 
   Clock, 
-  Database,
   ChevronDown,
-  Car,
-  Building2
+  Car
 } from 'lucide-react';
 import { tourService } from '../services/tourService';
 import { NorthEastState } from '../types';
 import { VEHICLE_TARIFFS, VehicleTypeId } from '../data/vehicles';
-import { VehicleTariffCard } from '../components/VehicleTariffCard';
-import { HotelTariffCard } from '../components/HotelTariffCard';
 
 interface ContactViewProps {
   onOpenPermitGuide: () => void;
@@ -47,12 +43,10 @@ export const ContactView: React.FC<ContactViewProps> = ({ onOpenPermitGuide }) =
   const [transportType, setTransportType] = useState<VehicleTypeId>('suv');
   const [selectedStates, setSelectedStates] = useState<NorthEastState[]>(['Nagaland', 'Meghalaya']);
   const [notes, setNotes] = useState('');
-  const [tariffViewTab, setTariffViewTab] = useState<'vehicles' | 'hotels'>('vehicles');
   
   // Submission state
   const [submitting, setSubmitting] = useState(false);
   const [submittedId, setSubmittedId] = useState<string | null>(null);
-  const [savedToSupabase, setSavedToSupabase] = useState(false);
 
   // FAQ Accordion State
   const [openFaq, setOpenFaq] = useState<number | null>(0);
@@ -87,7 +81,27 @@ export const ContactView: React.FC<ContactViewProps> = ({ onOpenPermitGuide }) =
       });
 
       setSubmittedId(res.id);
-      setSavedToSupabase(res.isSupabaseSaved);
+
+      // Auto-trigger WhatsApp message to the registered WhatsApp number with reference ID and inquiry details
+      const waMsg = `Hi North East Odyssey, I just submitted an inquiry on your portal!
+*Reference ID:* ${res.id}
+*Name:* ${fullName}
+*Phone:* ${phone}
+*Email:* ${email}
+*States:* ${selectedStates.join(', ')}
+*Travel Date:* ${travelDate || 'Flexible'}
+*Travelers:* ${travelersCount}
+*Budget Tier:* ${budgetTier === 'deluxe' ? 'Deluxe (3-Star Boutique)' : budgetTier === 'luxury' ? 'Luxury (Heritage Resorts)' : 'Standard (Value & Homestays)'}
+${notes ? `*Notes:* ${notes}` : ''}`;
+
+      const waUrl = `https://wa.me/919395109412?text=${encodeURIComponent(waMsg)}`;
+      
+      // Open WhatsApp chat in a new tab so user can send immediately
+      try {
+        window.open(waUrl, '_blank', 'noopener,noreferrer');
+      } catch (err) {
+        console.warn('Pop-up blocked or not allowed, fallback available via UI button', err);
+      }
     } catch (err) {
       console.error('Enquiry error:', err);
     } finally {
@@ -137,17 +151,11 @@ export const ContactView: React.FC<ContactViewProps> = ({ onOpenPermitGuide }) =
         <div className="lg:col-span-7">
           <div className="bg-white rounded-3xl p-6 sm:p-8 border border-stone-200 shadow-sm">
             
-            <div className="flex items-center justify-between pb-5 border-b border-stone-100 mb-6">
-              <div>
-                <h2 className="text-xl font-extrabold text-stone-900">Custom Trip Consultation Form</h2>
-                <p className="text-xs text-stone-500 mt-0.5">
-                  Submissions are synchronized dynamically into our Supabase database.
-                </p>
-              </div>
-              <span className="hidden sm:inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
-                <Database className="w-3 h-3" />
-                Live Supabase Ready
-              </span>
+            <div className="pb-5 border-b border-stone-100 mb-6">
+              <h2 className="text-xl font-extrabold text-stone-900">Custom Trip Consultation Form</h2>
+              <p className="text-xs text-stone-500 mt-0.5">
+                Send your travel requirements directly to our expedition specialists for a tailored itinerary.
+              </p>
             </div>
 
             {!submittedId ? (
@@ -353,7 +361,7 @@ export const ContactView: React.FC<ContactViewProps> = ({ onOpenPermitGuide }) =
                     className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-emerald-800 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition-all cursor-pointer disabled:opacity-50"
                   >
                     {submitting ? (
-                      <span>Sending to Database...</span>
+                      <span>Sending Inquiry...</span>
                     ) : (
                       <>
                         <Send className="w-3.5 h-3.5" />
@@ -376,12 +384,10 @@ export const ContactView: React.FC<ContactViewProps> = ({ onOpenPermitGuide }) =
                   Thank you, <strong>{fullName}</strong>. We have logged your request for <strong>{selectedStates.join(', ')}</strong> under Reference ID <code className="bg-stone-100 px-1.5 py-0.5 rounded text-stone-800 font-mono font-bold text-xs">{submittedId}</code>.
                 </p>
 
-                {savedToSupabase && (
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs border border-emerald-200">
-                    <Database className="w-3.5 h-3.5" />
-                    Stored in Supabase <code className="font-mono text-[11px]">enquiries</code> table
-                  </div>
-                )}
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs border border-emerald-200">
+                  <ShieldCheck className="w-3.5 h-3.5" />
+                  Inquiry confirmed & assigned to expedition team
+                </div>
 
                 <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
                   <a
@@ -436,8 +442,8 @@ export const ContactView: React.FC<ContactViewProps> = ({ onOpenPermitGuide }) =
                   <MapPin className="w-4 h-4" />
                 </div>
                 <div>
-                  <strong className="block text-white">Highland Ridge Camp (Kohima)</strong>
-                  <span className="text-stone-400">Kisama Ridge, Kigwema, Kohima, Nagaland 797005</span>
+                  <strong className="block text-white">Branch Office (Guwahati)</strong>
+                  <span className="text-stone-400">Natun Bazar, Basistha, Guwahati, Assam 781029</span>
                 </div>
               </div>
 
@@ -447,7 +453,18 @@ export const ContactView: React.FC<ContactViewProps> = ({ onOpenPermitGuide }) =
                 </div>
                 <div>
                   <strong className="block text-white">24x7 Traveler Hotlines</strong>
-                  <span className="text-stone-400">+91 93951 09412 / +91 8095650076</span>
+                  <div className="text-stone-300 font-medium space-y-0.5 mt-0.5">
+                    <div>
+                      <a href="tel:+919395109412" className="hover:text-emerald-400 transition-colors">
+                        +91 93951 09412
+                      </a>
+                    </div>
+                    <div>
+                      <a href="tel:+918095650076" className="hover:text-emerald-400 transition-colors">
+                        +91 8095650076
+                      </a>
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -457,7 +474,9 @@ export const ContactView: React.FC<ContactViewProps> = ({ onOpenPermitGuide }) =
                 </div>
                 <div>
                   <strong className="block text-white">Email Inquiries</strong>
-                  <span className="text-stone-400">expeditions@northeastodyssey.com</span>
+                  <a href="mailto:admin@northeast-odyssey.com" className="text-stone-300 hover:text-emerald-400 transition-colors">
+                    admin@northeast-odyssey.com
+                  </a>
                 </div>
               </div>
             </div>
@@ -509,62 +528,6 @@ export const ContactView: React.FC<ContactViewProps> = ({ onOpenPermitGuide }) =
 
         </div>
 
-      </div>
-
-      {/* Official Commercial Tariffs Section (Vehicles & Destination Hotels) */}
-      <div className="mt-14 pt-10 border-t border-stone-200">
-        <div className="text-center max-w-2xl mx-auto mb-6">
-          <span className="text-[11px] font-extrabold uppercase tracking-wider text-emerald-800 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
-            Transparent Pricing Standards
-          </span>
-          <h2 className="text-2xl sm:text-3xl font-black text-stone-900 mt-2">
-            Published Regional Fleet & Hotel Tariff Cards
-          </h2>
-          <p className="text-xs sm:text-sm text-stone-600 mt-1">
-            Every quote is grounded in these standardized commercial hill vehicle tariffs and verified destination hotel rates.
-          </p>
-
-          {/* Tab Selector */}
-          <div className="inline-flex p-1 bg-stone-100 rounded-xl border border-stone-200 mt-5">
-            <button
-              type="button"
-              onClick={() => setTariffViewTab('vehicles')}
-              className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                tariffViewTab === 'vehicles'
-                  ? 'bg-white text-stone-900 shadow-xs'
-                  : 'text-stone-600 hover:text-stone-900'
-              }`}
-            >
-              <Car className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Dedicated Vehicle Daily Rates</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setTariffViewTab('hotels')}
-              className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                tariffViewTab === 'hotels'
-                  ? 'bg-white text-stone-900 shadow-xs'
-                  : 'text-stone-600 hover:text-stone-900'
-              }`}
-            >
-              <Building2 className="w-3.5 h-3.5 text-blue-600" />
-              <span>Destination Hotel Tariffs (Std vs 3-Star)</span>
-            </button>
-          </div>
-        </div>
-
-        {tariffViewTab === 'vehicles' ? (
-          <VehicleTariffCard 
-            isArunachalZone={selectedStates.includes('Arunachal Pradesh')}
-            selectedVehicleId={transportType}
-            onSelectVehicle={(id) => setTransportType(id)}
-          />
-        ) : (
-          <HotelTariffCard 
-            highlightDestination={selectedStates[0] || 'Guwahati'}
-          />
-        )}
       </div>
 
     </div>

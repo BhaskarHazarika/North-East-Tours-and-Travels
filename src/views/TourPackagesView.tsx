@@ -7,7 +7,6 @@ import {
   RotateCcw, 
   AlertCircle, 
   ArrowRight, 
-  Database, 
   Search, 
   Filter,
   Crown
@@ -51,7 +50,6 @@ export const TourPackagesView: React.FC<TourPackagesViewProps> = ({
 }) => {
   const [packages, setPackages] = useState<TourPackage[]>([]);
   const [loading, setLoading] = useState(true);
-  const [isFromSupabase, setIsFromSupabase] = useState(false);
 
   // Filters
   const [selectedState, setSelectedState] = useState<NorthEastState | 'All'>(initialStateFilter);
@@ -74,7 +72,6 @@ export const TourPackagesView: React.FC<TourPackagesViewProps> = ({
         sortBy
       });
       setPackages(res.data);
-      setIsFromSupabase(res.isFromSupabase);
       setLoading(false);
     }
     fetchPackages();
@@ -104,14 +101,6 @@ export const TourPackagesView: React.FC<TourPackagesViewProps> = ({
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold uppercase tracking-wider mb-2">
             <Compass className="w-3.5 h-3.5" />
             North East Curated Expeditions
-            <span className={`ml-1.5 px-2 py-0.5 rounded-full text-[10px] ${
-              isFromSupabase 
-                ? 'bg-emerald-700 text-white flex items-center gap-1' 
-                : 'bg-stone-200 text-stone-700'
-            }`}>
-              <Database className="w-2.5 h-2.5" />
-              {isFromSupabase ? 'Supabase Database Connected' : 'Dynamic Catalog'}
-            </span>
           </div>
 
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-stone-900 tracking-tight">

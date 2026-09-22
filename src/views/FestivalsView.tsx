@@ -26,7 +26,6 @@ export const FestivalsView: React.FC<FestivalsViewProps> = ({
 }) => {
   const [festivals, setFestivals] = useState<SupabaseFestival[]>([]);
   const [loading, setLoading] = useState(true);
-  const [isFromSupabase, setIsFromSupabase] = useState(false);
   const [filterState, setFilterState] = useState<string>('All');
   const [selectedFestival, setSelectedFestival] = useState<SupabaseFestival | null>(null);
 
@@ -35,7 +34,6 @@ export const FestivalsView: React.FC<FestivalsViewProps> = ({
       setLoading(true);
       const res = await tourService.getFestivals();
       setFestivals(res.data);
-      setIsFromSupabase(res.isFromSupabase);
       if (res.data.length > 0) {
         setSelectedFestival(res.data[0]);
       }
@@ -59,11 +57,6 @@ export const FestivalsView: React.FC<FestivalsViewProps> = ({
         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-100 text-amber-900 text-xs font-bold uppercase tracking-wider mb-3">
           <Sparkles className="w-3.5 h-3.5 text-amber-700" />
           Tribal Rituals & Wilderness Expeditions
-          {isFromSupabase && (
-            <span className="ml-1.5 px-2 py-0.5 bg-emerald-700 text-white text-[10px] rounded-full">
-              Supabase Live
-            </span>
-          )}
         </div>
         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-stone-900 tracking-tight">
           Festivals & Iconic Experiences

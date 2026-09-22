@@ -245,6 +245,26 @@ export const TourDetailModal: React.FC<TourDetailModalProps> = ({
     const refId = 'NEO-' + Math.floor(100000 + Math.random() * 900000);
     setBookingRef(refId);
     setBookingConfirmed(true);
+
+    const currentVehicle = VEHICLE_TARIFFS.find(v => v.id === transportType) || VEHICLE_TARIFFS[0];
+    const text = `Hi North East Odyssey! I just generated a formal estimate / inquiry:
+*Reference ID:* ${refId}
+*Tour:* ${tour.title}
+*Travelers:* ${travelers} persons
+*Date:* ${travelDate || 'Flexible'}
+*Stay Tier:* ${accommodationTier === 'deluxe' ? 'Deluxe 3-Star Tier' : accommodationTier === 'luxury' ? 'Luxury Eco-Resort' : 'Standard Tier (Base)'}
+*Vehicle:* ${currentVehicle.name}
+*Estimated Total:* ${formatPrice(priceCalculation.totalEstimated)}
+*Traveler Name:* ${fullName || 'Guest'}
+*Phone:* ${phone}
+*Email:* ${email}`;
+
+    const waUrl = `https://wa.me/919395109412?text=${encodeURIComponent(text)}`;
+    try {
+      window.open(waUrl, '_blank', 'noopener,noreferrer');
+    } catch (err) {
+      console.warn('Pop-up blocked, fallback link available in estimate card', err);
+    }
   };
 
   const generateWhatsAppUrl = () => {

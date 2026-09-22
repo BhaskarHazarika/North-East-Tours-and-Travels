@@ -105,7 +105,7 @@ export const Footer: React.FC<FooterProps> = ({
               </div>
               <div className="flex items-center gap-2">
                 <MapPin className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                <span>Camp Office: Kigwema / Kisama Ridge, Kohima, Nagaland 797005</span>
+                <span>Branch Office: Natun Bazar, Basistha, Guwahati, Assam 781029</span>
               </div>
               <div className="flex items-center gap-2">
                 <Phone className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
@@ -113,7 +113,9 @@ export const Footer: React.FC<FooterProps> = ({
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                <span>expeditions@northeastodyssey.com</span>
+                <a href="mailto:admin@northeast-odyssey.com" className="hover:text-emerald-400 transition-colors">
+                  admin@northeast-odyssey.com
+                </a>
               </div>
             </div>
           </div>
@@ -248,15 +250,6 @@ export const Footer: React.FC<FooterProps> = ({
                   className="hover:text-white text-emerald-400 font-bold text-left cursor-pointer"
                 >
                   Request Tailor-Made Quote →
-                </button>
-              </li>
-              <li className="pt-2 border-t border-stone-800">
-                <button
-                  onClick={() => onNavigate('admin')}
-                  className="text-stone-500 hover:text-stone-300 flex items-center gap-1.5 cursor-pointer text-[11px]"
-                >
-                  <Lock className="w-3 h-3" />
-                  <span>Admin Management Console</span>
                 </button>
               </li>
             </ul>
