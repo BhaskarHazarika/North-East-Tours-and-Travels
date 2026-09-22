@@ -1,0 +1,6 @@
+{
+  "name": "North East India Tours & Travels",
+  "description": "Authentic North East India tour packages, festival specials for Hornbill and Ziro, Dzukou Valley trekking expeditions, and instant transparent price estimation.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
