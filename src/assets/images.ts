@@ -11,10 +11,12 @@ import sikkimKanchenjungaImg from './images/sikkim_kanchenjunga_1789671310521.jp
 import dzukouValleyImg from './images/dzukou_valley_1789671328735.jpg';
 import ziroValleyImg from './images/ziro_valley_1789671341533.jpg';
 import heroMountainsImg from './images/northeast_hero_mountains_1789671371864.jpg';
+import vibrantHeroImg from './images/northeast_vibrant_hero_1790253965696.jpg';
 
 export const CAMERA_IMAGES = {
   // Hero & General
   heroMountains: heroMountainsImg,
+  heroVibrant: vibrantHeroImg,
 
   // States
   assam: assamTeaImg,

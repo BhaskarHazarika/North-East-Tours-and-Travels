@@ -545,10 +545,10 @@ export const MULTISTATE_PACKAGES: TourPackage[] = [
       }
     ],
     inclusions: [
-      '11 nights accommodation in luxury view suites, boutique resorts & premier hotels (twin-sharing)',
-      'Daily breakfast and all dinners during Kaziranga and Arunachal sectors',
-      'Private dedicated Toyota Innova Crysta for all 12 days with senior mountain driver',
-      '1 Dawn Elephant Safari and 1 Afternoon Open Jeep Safari in Kaziranga National Park',
+      '11 nights accommodation in verified 3-star & deluxe boutique resorts (twin-sharing)',
+      'Daily breakfast at all hotels and dinners during Kaziranga and Arunachal stays',
+      'Private dedicated Toyota Innova Crysta for all 12 days with fuel, tolls & driver allowances',
+      '1 Kaziranga dawn elephant safari and 1 afternoon 4x4 jeep safari with forest permits',
       'Official Arunachal Pradesh Inner Line Permit (ILP) processing',
       'Exclusive 4x4 vehicle and army clearances for Bum La Pass and Madhuri Lake',
       'Dedicated local trekking guide for Nongriat Living Root Bridge'

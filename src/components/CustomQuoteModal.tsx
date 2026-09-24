@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { X, Send, Sparkles, CheckCircle2, MessageCircle, MapPin, Calendar, Users, Car } from 'lucide-react';
-import { NorthEastState } from '../types';
+import { X, Send, CheckCircle2, MessageCircle, Car } from 'lucide-react';
 import { VEHICLE_TARIFFS, VehicleTypeId } from '../data/vehicles';
 
 interface CustomQuoteModalProps {
@@ -9,15 +8,17 @@ interface CustomQuoteModalProps {
   currency: 'INR' | 'USD';
 }
 
-export const CustomQuoteModal: React.FC<CustomQuoteModalProps> = ({ isOpen, onClose, currency }) => {
+export const CustomQuoteModal: React.FC<CustomQuoteModalProps> = ({ isOpen, onClose }) => {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
-  const [selectedStates, setSelectedStates] = useState<string[]>(['Nagaland']);
-  const [duration, setDuration] = useState('6-8 Days');
-  const [budgetTier, setBudgetTier] = useState('Comfort Heritage');
+  const [selectedStates, setSelectedStates] = useState<string[]>(['Arunachal Pradesh', 'Assam']);
+  const [duration, setDuration] = useState('8-10 Days (Recommended)');
+  const [travelStyle, setTravelStyle] = useState('Cultural Immersion & Living Traditions');
+  const [specialOccasion, setSpecialOccasion] = useState('Personal Expedition / None');
+  const [stayPreference, setStayPreference] = useState('Boutique Mountain Retreats & Heritage Bungalows');
   const [vehicleType, setVehicleType] = useState<VehicleTypeId>('suv');
-  const [travelMonth, setTravelMonth] = useState('December (Hornbill Festival)');
+  const [travelMonth, setTravelMonth] = useState('Oct - Nov (Autumn Passes & Clear Ridges)');
   const [notes, setNotes] = useState('');
   const [bookingRef, setBookingRef] = useState<string>('');
   const [submitted, setSubmitted] = useState(false);
@@ -36,20 +37,22 @@ export const CustomQuoteModal: React.FC<CustomQuoteModalProps> = ({ isOpen, onCl
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const refId = 'NEO-REQ-' + Math.floor(100000 + Math.random() * 900000);
+    const refId = 'NEO-CONCIERGE-' + Math.floor(100000 + Math.random() * 900000);
     setBookingRef(refId);
     setSubmitted(true);
 
     const selectedVeh = VEHICLE_TARIFFS.find(v => v.id === vehicleType);
-    const msg = `Hi North East Odyssey! Custom Trip Request:
-*Reference ID:* ${refId}
-*States:* ${selectedStates.join(', ')}
+    const msg = `Hi North East Odyssey Concierge! Bespoke Route Request:
+*Ref ID:* ${refId}
+*Regions:* ${selectedStates.join(', ')}
+*Travel Style:* ${travelStyle}
+*Special Occasion:* ${specialOccasion}
 *Duration:* ${duration}
-*Month:* ${travelMonth}
-*Budget Tier:* ${budgetTier}
+*Window:* ${travelMonth}
+*Stays:* ${stayPreference}
 *Vehicle:* ${selectedVeh?.name || vehicleType}
-*Traveler:* ${name || 'Guest'} (${phone || email})
-*Notes:* ${notes || 'None'}`;
+*Lead Traveler:* ${name || 'Guest'} (${phone || email})
+*Specific Interests & Access Notes:* ${notes || 'None'}`;
 
     const waUrl = `https://wa.me/919395109412?text=${encodeURIComponent(msg)}`;
     try {
@@ -61,66 +64,67 @@ export const CustomQuoteModal: React.FC<CustomQuoteModalProps> = ({ isOpen, onCl
 
   const getWhatsAppLink = () => {
     const selectedVeh = VEHICLE_TARIFFS.find(v => v.id === vehicleType);
-    const msg = `Hi North East Odyssey! Custom Trip Request:
-States: ${selectedStates.join(', ')}
+    const msg = `Hi North East Odyssey Concierge! Bespoke Route Request:
+Regions: ${selectedStates.join(', ')}
+Travel Style: ${travelStyle}
+Special Occasion: ${specialOccasion}
 Duration: ${duration}
-Month: ${travelMonth}
-Budget Tier: ${budgetTier}
+Window: ${travelMonth}
+Stays: ${stayPreference}
 Vehicle: ${selectedVeh?.name || vehicleType}
-Traveler: ${name || 'Guest'} (${phone || email})
-Notes: ${notes || 'None'}`;
+Lead Traveler: ${name || 'Guest'} (${phone || email})
+Specific Interests: ${notes || 'None'}`;
     return `https://wa.me/919395109412?text=${encodeURIComponent(msg)}`;
   };
 
   return (
     <div 
       id="custom-quote-modal-overlay"
-      className="fixed inset-0 z-50 overflow-y-auto bg-stone-950/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6"
+      className="fixed inset-0 z-50 overflow-y-auto bg-stone-950/80 backdrop-blur-xs flex items-center justify-center p-3 sm:p-6"
     >
       <div 
         id="custom-quote-modal-card"
-        className="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl overflow-hidden border border-stone-200"
+        className="relative w-full max-w-2xl bg-[#FAF8F5] rounded-2xl shadow-2xl overflow-hidden border border-stone-200"
       >
-        <div className="bg-stone-900 text-white p-5 sm:p-6 relative">
+        <div className="bg-[#14231B] text-white p-6 sm:p-7 relative border-b border-[#243B2E]">
           <button 
             onClick={onClose}
-            className="absolute top-4 right-4 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
+            className="absolute top-5 right-5 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
             aria-label="Close form"
           >
             <X className="w-5 h-5" />
           </button>
 
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-semibold mb-2 border border-amber-400/30">
-            <Sparkles className="w-3.5 h-3.5" />
-            Tailor-Made Tour Planner
+          <div className="text-[11px] font-semibold text-amber-300 tracking-wider mb-1">
+            Bespoke Expedition Curation · Guwahati Operations Desk
           </div>
-          <h2 className="text-xl sm:text-2xl font-black">
-            Plan a Custom North East Journey
+          <h2 className="text-2xl sm:text-3xl font-serif text-white tracking-tight">
+            Curate a Private North East Journey
           </h2>
-          <p className="text-xs sm:text-sm text-stone-300 mt-1">
-            Looking to combine Hornbill + Meghalaya, or trek Dzukou + explore Kaziranga? Tell us your dream route.
+          <p className="text-xs sm:text-sm text-stone-300 mt-1.5 max-w-lg leading-relaxed">
+            For itineraries requiring protected border clearances, 4x4 mountain transit, or hearthside tribal access. A senior route director reviews every submission and responds within 3 hours.
           </p>
         </div>
 
-        <div className="p-5 sm:p-6 max-h-[75vh] overflow-y-auto">
+        <div className="p-6 max-h-[75vh] overflow-y-auto space-y-5">
           {!submitted ? (
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4 text-xs">
               
-              {/* Select States */}
+              {/* Select Regions */}
               <div>
-                <label className="text-xs font-bold text-stone-800 block mb-1.5">
-                  1. Which States Do You Want to Include?
+                <label className="font-semibold text-stone-800 block mb-1.5">
+                  1. Regional Corridors of Interest
                 </label>
                 <div className="flex flex-wrap gap-2">
-                  {['Nagaland', 'Arunachal Pradesh', 'Meghalaya', 'Assam', 'Sikkim', 'Manipur'].map((st) => (
+                  {['Arunachal Pradesh', 'Meghalaya', 'Assam', 'Nagaland', 'Sikkim', 'Manipur'].map((st) => (
                     <button
                       key={st}
                       type="button"
                       onClick={() => toggleState(st)}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all cursor-pointer ${
+                      className={`px-3 py-1.5 rounded-md font-medium border transition-all cursor-pointer ${
                         selectedStates.includes(st)
-                          ? 'bg-emerald-700 text-white border-emerald-700 shadow-xs'
-                          : 'bg-stone-100 text-stone-700 border-stone-200 hover:bg-stone-200'
+                          ? 'bg-[#1E382B] text-white border-[#1E382B]'
+                          : 'bg-white text-stone-700 border-stone-300 hover:bg-stone-100'
                       }`}
                     >
                       {st}
@@ -129,81 +133,120 @@ Notes: ${notes || 'None'}`;
                 </div>
               </div>
 
-              {/* Trip Preferences Row */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {/* Travel Style & Occasion */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="text-xs font-bold text-stone-700 block mb-1">
-                    Duration
+                  <label className="font-semibold text-stone-700 block mb-1">
+                    2. Primary Focus & Travel Style
                   </label>
                   <select 
-                    value={duration}
-                    onChange={(e) => setDuration(e.target.value)}
-                    className="w-full px-3 py-2 text-xs bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-600/30"
+                    value={travelStyle}
+                    onChange={(e) => setTravelStyle(e.target.value)}
+                    className="w-full px-3 py-2 bg-white border border-stone-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#1E382B]"
                   >
-                    <option>4-5 Days (Quick Escape)</option>
-                    <option>6-8 Days (Recommended)</option>
-                    <option>9-12 Days (Grand Expedition)</option>
-                    <option>14+ Days (Full North East Circuit)</option>
+                    <option>Cultural Immersion & Living Traditions</option>
+                    <option>Wildlife Safari & Rare Birding Expeditions</option>
+                    <option>High-Altitude Himalayan Passes & Trekking</option>
+                    <option>Slow Colonial Heritage & River Retreats</option>
+                    <option>Living Architecture & Sacred Monasteries</option>
                   </select>
                 </div>
 
                 <div>
-                  <label className="text-xs font-bold text-stone-700 block mb-1">
-                    Ideal Month / Event
+                  <label className="font-semibold text-stone-700 block mb-1">
+                    3. Special Occasion / Milestone
                   </label>
                   <select 
-                    value={travelMonth}
-                    onChange={(e) => setTravelMonth(e.target.value)}
-                    className="w-full px-3 py-2 text-xs bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-600/30"
+                    value={specialOccasion}
+                    onChange={(e) => setSpecialOccasion(e.target.value)}
+                    className="w-full px-3 py-2 bg-white border border-stone-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#1E382B]"
                   >
-                    <option>December (Hornbill Festival)</option>
-                    <option>September (Ziro Music Fest)</option>
-                    <option>Oct - Nov (Autumn & Dzukou Frost)</option>
-                    <option>Jan - Mar (Winter Wildlife & Safaris)</option>
-                    <option>Apr - May (Spring Flowers & Waterfalls)</option>
-                    <option>June - July (Dzukou Lilies Blooming)</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="text-xs font-bold text-stone-700 block mb-1">
-                    Stay & Comfort
-                  </label>
-                  <select 
-                    value={budgetTier}
-                    onChange={(e) => setBudgetTier(e.target.value)}
-                    className="w-full px-3 py-2 text-xs bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-600/30"
-                  >
-                    <option>Standard (Eco-camps & Homestays)</option>
-                    <option>Comfort Heritage (Boutique Cottages)</option>
-                    <option>Luxury Eco-Resorts</option>
+                    <option>Personal Expedition / None</option>
+                    <option>Milestone Birthday / Celebration</option>
+                    <option>Wedding Anniversary / Honeymoon</option>
+                    <option>Private Sabbatical / Creative Solo</option>
+                    <option>Multi-Generational Family Journey</option>
                   </select>
                 </div>
               </div>
 
-              {/* Dedicated Outstation Vehicle */}
+              {/* Duration & Month */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="font-semibold text-stone-700 block mb-1">
+                    4. Desired Duration
+                  </label>
+                  <select 
+                    value={duration}
+                    onChange={(e) => setDuration(e.target.value)}
+                    className="w-full px-3 py-2 bg-white border border-stone-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#1E382B]"
+                  >
+                    <option>5-7 Days (Focused Single Region)</option>
+                    <option>8-10 Days (Recommended Cross-State)</option>
+                    <option>11-14 Days (Comprehensive Himalayan Circuit)</option>
+                    <option>15+ Days (Grand Trans-Regional Expedition)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="font-semibold text-stone-700 block mb-1">
+                    5. Seasonal Window
+                  </label>
+                  <select 
+                    value={travelMonth}
+                    onChange={(e) => setTravelMonth(e.target.value)}
+                    className="w-full px-3 py-2 bg-white border border-stone-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#1E382B]"
+                  >
+                    <option>Oct - Nov (Autumn Passes & Clear Ridges)</option>
+                    <option>December (Hornbill Festival Season)</option>
+                    <option>Jan - Mar (Winter Wildlife & Brahmaputra Mist)</option>
+                    <option>Apr - May (Spring Orchids & Rhododendrons)</option>
+                    <option>Jun - Aug (Monsoon Canyons & Living Bridges)</option>
+                    <option>September (Ziro Music Festival & Harvest)</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Stay Preference */}
               <div>
-                <label className="text-xs font-bold text-stone-800 flex items-center gap-1.5 mb-1">
-                  <Car className="w-3.5 h-3.5 text-emerald-700" />
-                  Preferred Outstation Vehicle (Commercial Hill Fleet)
+                <label className="font-semibold text-stone-800 block mb-1">
+                  6. Preferred Stay Category
+                </label>
+                <select 
+                  value={stayPreference}
+                  onChange={(e) => setStayPreference(e.target.value)}
+                  className="w-full px-3 py-2 bg-white border border-stone-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#1E382B]"
+                >
+                  <option>Boutique Mountain Retreats & Heritage Bungalows</option>
+                  <option>Handpicked Tribal Village Homestays (Ensuite Bathrooms)</option>
+                  <option>Luxury Eco-Resorts & Private Verandahs</option>
+                  <option>Blend of Heritage Estates and Village Stays</option>
+                </select>
+              </div>
+
+              {/* Dedicated Vehicle */}
+              <div>
+                <label className="font-semibold text-stone-800 flex items-center gap-1.5 mb-1">
+                  <Car className="w-3.5 h-3.5 text-[#1E382B]" />
+                  7. Private Vehicle Preference
                 </label>
                 <select
                   value={vehicleType}
                   onChange={(e) => setVehicleType(e.target.value as VehicleTypeId)}
-                  className="w-full px-3 py-2 text-xs bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-600/30"
+                  className="w-full px-3 py-2 bg-white border border-stone-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#1E382B]"
                 >
                   {VEHICLE_TARIFFS.map((veh) => (
                     <option key={veh.id} value={veh.id}>
-                      {veh.name} — Cap: {veh.seatingCapacity} seats (Rec: {veh.recommendedGroupSize} pax) | Assam/Megh: Rs.{veh.meghalayaAssamRatePerDay.toLocaleString('en-IN')}/d {veh.arunachalRatePerDay ? `| Arun: Rs.${veh.arunachalRatePerDay.toLocaleString('en-IN')}/d` : '| Arun: N/A'}
+                      {veh.name} — Recommended: {veh.recommendedGroupLabel || `${veh.recommendedGroupSize} travelers`}
                     </option>
                   ))}
                 </select>
               </div>
 
               {/* Contact info */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 border-t border-stone-200">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-3 border-t border-stone-200">
                 <div>
-                  <label className="text-xs font-bold text-stone-700 block mb-1">
+                  <label className="font-semibold text-stone-700 block mb-1">
                     Your Name *
                   </label>
                   <input 
@@ -211,13 +254,13 @@ Notes: ${notes || 'None'}`;
                     required
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    placeholder="e.g. Bhaskar H."
-                    className="w-full px-3 py-2 text-xs bg-stone-50 border border-stone-200 rounded-xl"
+                    placeholder="e.g. Vikram Iyer"
+                    className="w-full px-3 py-2 bg-white border border-stone-300 rounded-md"
                   />
                 </div>
 
                 <div>
-                  <label className="text-xs font-bold text-stone-700 block mb-1">
+                  <label className="font-semibold text-stone-700 block mb-1">
                     Phone / WhatsApp *
                   </label>
                   <input 
@@ -226,81 +269,79 @@ Notes: ${notes || 'None'}`;
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     placeholder="+91 98765 43210"
-                    className="w-full px-3 py-2 text-xs bg-stone-50 border border-stone-200 rounded-xl"
+                    className="w-full px-3 py-2 bg-white border border-stone-300 rounded-md"
                   />
                 </div>
 
                 <div>
-                  <label className="text-xs font-bold text-stone-700 block mb-1">
-                    Email *
+                  <label className="font-semibold text-stone-700 block mb-1">
+                    Email Address *
                   </label>
                   <input 
                     type="email"
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="name@email.com"
-                    className="w-full px-3 py-2 text-xs bg-stone-50 border border-stone-200 rounded-xl"
+                    placeholder="vikram@example.com"
+                    className="w-full px-3 py-2 bg-white border border-stone-300 rounded-md"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="text-xs font-bold text-stone-700 block mb-1">
-                  Specific wishes (e.g. self-drive 4x4, specific tribe visits, birdwatching list)
+                <label className="font-semibold text-stone-700 block mb-1">
+                  Specific Requests (e.g. photography permits, monastery access, birding target list)
                 </label>
                 <textarea 
                   rows={2}
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
-                  placeholder="Tell us what matters most for your trip..."
-                  className="w-full px-3 py-2 text-xs bg-stone-50 border border-stone-200 rounded-xl"
+                  placeholder="Share any special preferences, fitness considerations, or specific locations you wish to include..."
+                  className="w-full px-3 py-2 bg-white border border-stone-300 rounded-md"
                 />
               </div>
 
-              <div className="flex items-center justify-between pt-2">
-                <a 
-                  href={getWhatsAppLink()}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-xs font-bold text-emerald-700 hover:underline flex items-center gap-1"
-                >
-                  <MessageCircle className="w-4 h-4" />
-                  Chat on WhatsApp Directly
-                </a>
-
+              <div className="pt-2">
                 <button
                   type="submit"
-                  className="px-6 py-2.5 rounded-xl bg-emerald-800 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition-all cursor-pointer"
+                  className="w-full py-3 px-4 rounded-md bg-[#1E382B] hover:bg-[#14261D] text-white font-medium text-xs sm:text-sm tracking-wide transition-all cursor-pointer flex items-center justify-center gap-2"
                 >
-                  Send Custom Request
+                  <Send className="w-4 h-4" />
+                  <span>Submit to Route Director · Guaranteed 3-Hour Review</span>
                 </button>
+                <p className="text-[11px] text-stone-500 text-center mt-2">
+                  No payment required. We review road clearances and vehicle logistics before issuing confirmed proposals.
+                </p>
               </div>
             </form>
           ) : (
-            <div className="text-center py-8 space-y-3">
+            <div className="py-8 text-center space-y-4">
               <div className="w-12 h-12 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center mx-auto">
-                <CheckCircle2 className="w-6 h-6 text-emerald-700" />
+                <CheckCircle2 className="w-6 h-6 text-[#1E382B]" />
               </div>
-              <h4 className="text-lg font-bold text-stone-900">Custom Itinerary Inquiry Received!</h4>
-              <p className="text-xs text-stone-600 max-w-sm mx-auto">
-                We have received your request for <strong>{selectedStates.join(', ')}</strong> under Reference ID <code className="bg-stone-100 px-1.5 py-0.5 rounded text-stone-800 font-mono font-bold text-xs">{bookingRef}</code>.
+              <h3 className="text-xl font-serif font-bold text-stone-900">
+                Inquiry Assigned to Route Specialist
+              </h3>
+              <p className="text-xs text-stone-600 max-w-md mx-auto leading-relaxed">
+                Reference <strong>{bookingRef}</strong> has been transmitted directly to our Guwahati operations desk. A specialist will review your route parameters and connect with you within 3 hours.
               </p>
-              <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-2">
+
+              <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
                 <a
-                  href={`https://wa.me/919395109412?text=${encodeURIComponent(`Hi North East Odyssey, I just submitted a custom itinerary request (Ref: ${bookingRef}) for ${selectedStates.join(', ')}. My name is ${name || 'Guest'}.`)}`}
+                  href={getWhatsAppLink()}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-4 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold flex items-center gap-1.5 shadow-sm"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-[#25D366] hover:bg-[#1EBE5D] text-white font-medium text-xs shadow-xs"
                 >
                   <MessageCircle className="w-4 h-4" />
-                  <span>Send on WhatsApp</span>
+                  <span>Open WhatsApp Direct Thread</span>
                 </a>
                 <button
+                  type="button"
                   onClick={onClose}
-                  className="px-4 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-800 text-xs font-bold cursor-pointer"
+                  className="px-4 py-2 rounded-md bg-stone-200 hover:bg-stone-300 text-stone-800 font-medium text-xs cursor-pointer"
                 >
-                  Done
+                  Close Window
                 </button>
               </div>
             </div>

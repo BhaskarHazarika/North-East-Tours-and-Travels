@@ -40,9 +40,7 @@ import {
   getDailyVehicleRate, 
   getRecommendedVehicle 
 } from '../data/vehicles';
-import { VehicleTariffCard } from './VehicleTariffCard';
 import { HOTEL_TARIFFS, getHotelTariff } from '../data/hotels';
-import { HotelTariffCard } from './HotelTariffCard';
 
 interface TourDetailModalProps {
   tour: TourPackage | null;
@@ -179,7 +177,7 @@ export const TourDetailModal: React.FC<TourDetailModalProps> = ({
 
     // Vehicle Transport Calculation from official commercial tariff table
     const tourDays = tour.durationDays || (tour.durationNights + 1) || 5;
-    const baseDailyRate = isArunachal ? 7200 : 3800; // Baseline entry vehicle rate
+    const baseDailyRate = isArunachal ? 5300 : 3800; // Baseline entry vehicle rate
     const selectedDailyRate = getDailyVehicleRate(transportType, isArunachal) ?? baseDailyRate;
 
     // Daily difference between selected vehicle and baseline vehicle
@@ -274,7 +272,7 @@ Tour: ${tour.title}
 Travelers: ${travelers} persons
 Date: ${travelDate || 'Flexible'}
 Stay Tier: ${accommodationTier === 'deluxe' ? 'Deluxe 3-Star Tier' : accommodationTier === 'luxury' ? 'Luxury Eco-Resort' : 'Standard Tier (Base)'}
-Vehicle: ${currentVehicle.name} (Rs. ${priceCalculation.selectedDailyRate.toLocaleString('en-IN')}/day)
+Vehicle: ${currentVehicle.name}
 Estimated Total: ${formatPrice(priceCalculation.totalEstimated)}
 Reference: ${bookingRef || 'Direct Inquire'}
 Name: ${fullName || 'Guest'}`;
@@ -289,7 +287,7 @@ Name: ${fullName || 'Guest'}`;
 Duration: ${tour.durationDays} Days / ${tour.durationNights} Nights
 State / Region: ${tour.state}
 Estimated Travelers: ${travelers} ${travelers === 1 ? 'traveler' : 'travelers'}
-Selected Vehicle: ${currentVehicle.name} (Rs. ${priceCalculation.selectedDailyRate.toLocaleString('en-IN')}/day)
+Selected Vehicle: ${currentVehicle.name}
 Stay Tier: ${accommodationTier === 'deluxe' ? 'Deluxe 3-Star Tier' : accommodationTier === 'luxury' ? 'Luxury Eco-Resort' : 'Standard Tier (Base)'}
 Estimated Package Cost: ${formatPrice(priceCalculation.totalEstimated)}
 Preferred Date: ${travelDate || 'Flexible / Next Available'}
@@ -904,7 +902,7 @@ Please share availability, departure dates, and booking details for this tour!`;
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                     <label className="text-xs font-bold text-stone-800 flex items-center gap-1.5">
                       <Home className="w-4 h-4 text-emerald-600" />
-                      2. Choose Accommodation Tier (Standard vs Deluxe 3-Star):
+                      2. Choose Accommodation Tier:
                     </label>
                   </div>
 
@@ -921,7 +919,11 @@ Please share availability, departure dates, and booking details for this tour!`;
                     >
                       <div className="flex items-center justify-between mb-1">
                         <span className="font-bold text-xs text-stone-900">Standard Tier</span>
-                        <span className="text-[11px] font-mono text-emerald-700 font-bold">Base Included</span>
+                        {accommodationTier === 'standard' && (
+                          <span className="text-[10px] font-medium text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded">
+                            Selected
+                          </span>
+                        )}
                       </div>
                       <p className="text-[11px] text-stone-500">
                         Clean verified tourist hotels & authentic homestays with attached western baths & breakfast.
@@ -934,15 +936,17 @@ Please share availability, departure dates, and booking details for this tour!`;
                       onClick={() => setAccommodationTier('deluxe')}
                       className={`p-3.5 rounded-xl border text-left transition-all cursor-pointer ${
                         accommodationTier === 'deluxe'
-                          ? 'border-blue-600 bg-blue-50/60 ring-2 ring-blue-600/20'
+                          ? 'border-emerald-700 bg-emerald-50/50 ring-2 ring-emerald-700/20'
                           : 'border-stone-200 bg-white hover:border-stone-300'
                       }`}
                     >
                       <div className="flex items-center justify-between mb-1">
                         <span className="font-bold text-xs text-stone-900">Deluxe 3-Star Tier</span>
-                        <span className="text-[11px] font-mono text-blue-700 font-bold">
-                          +{formatPrice(priceCalculation.deluxePerPersonUpgrade)}/p
-                        </span>
+                        {accommodationTier === 'deluxe' && (
+                          <span className="text-[10px] font-medium text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded">
+                            Selected
+                          </span>
+                        )}
                       </div>
                       <p className="text-[11px] text-stone-500">
                         Handpicked 3-star view hotels with room heaters, balconies & buffet breakfast.
@@ -955,15 +959,17 @@ Please share availability, departure dates, and booking details for this tour!`;
                       onClick={() => setAccommodationTier('luxury')}
                       className={`p-3.5 rounded-xl border text-left transition-all cursor-pointer ${
                         accommodationTier === 'luxury'
-                          ? 'border-purple-600 bg-purple-50/60 ring-2 ring-purple-600/20'
+                          ? 'border-emerald-700 bg-emerald-50/50 ring-2 ring-emerald-700/20'
                           : 'border-stone-200 bg-white hover:border-stone-300'
                       }`}
                     >
                       <div className="flex items-center justify-between mb-1">
                         <span className="font-bold text-xs text-stone-900">Luxury Eco-Resort</span>
-                        <span className="text-[11px] font-mono text-purple-700 font-bold">
-                          +{formatPrice(priceCalculation.luxuryPerPersonUpgrade)}/p
-                        </span>
+                        {accommodationTier === 'luxury' && (
+                          <span className="text-[10px] font-medium text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded">
+                            Selected
+                          </span>
+                        )}
                       </div>
                       <p className="text-[11px] text-stone-500">
                         Premium view suites, colonial tea bungalows & boutique mountain glamping with luxury amenities.
@@ -997,7 +1003,7 @@ Please share availability, departure dates, and booking details for this tour!`;
                       const isSelected = transportType === vehicle.id;
                       const isSedanInArunachal = isArunachal && vehicle.id === 'sedan';
                       const dailyRate = isArunachal ? vehicle.arunachalRatePerDay : vehicle.meghalayaAssamRatePerDay;
-                      const baseDaily = isArunachal ? 7200 : 3800;
+                      const baseDaily = isArunachal ? 5500 : 3800;
                       const delta = dailyRate !== null ? Math.max(0, dailyRate - baseDaily) : 0;
                       const personDelta = Math.round((delta * priceCalculation.tourDays) / Math.max(1, travelers));
                       const isRecommended = travelers === vehicle.recommendedGroupSize;
@@ -1036,23 +1042,21 @@ Please share availability, departure dates, and booking details for this tour!`;
                               <span>Rec. Group: <strong>{vehicle.recommendedGroupSize} pax</strong></span>
                             </div>
 
-                            {/* Daily Rate & Surcharge */}
+                            {/* Vehicle Included/Suitability */}
                             <div className="text-[11px] space-y-0.5">
-                              <div className="font-mono text-stone-700">
-                                Tariff: <strong className="text-blue-700">
-                                  {dailyRate !== null ? `Rs.${dailyRate.toLocaleString('en-IN')}/day` : 'N/A'}
-                                </strong>
-                              </div>
-
                               {isSedanInArunachal ? (
                                 <div className="text-[10px] font-bold text-rose-700 bg-rose-50 px-1.5 py-0.5 rounded">
                                   Not allowed on steep Arunachal passes
                                 </div>
                               ) : delta === 0 ? (
                                 <div className="text-[11px] font-semibold text-emerald-700">
-                                  Base Land Vehicle Included
+                                  Standard Vehicle Included
                                 </div>
-                              ) : null}
+                              ) : (
+                                <div className="text-[11px] font-medium text-stone-600">
+                                  Upgraded Private Vehicle
+                                </div>
+                              )}
                             </div>
                           </div>
 
@@ -1170,59 +1174,74 @@ Please share availability, departure dates, and booking details for this tour!`;
                   </div>
                 </div>
 
-                {/* Price Breakdown Result Card */}
-                <div className="p-5 rounded-2xl bg-stone-900 text-white shadow-xl">
+                {/* Price Breakdown Result Card - Step 1 Guided Estimate */}
+                <div className="p-6 rounded-2xl bg-[#14231B] text-white shadow-xl border border-[#233B2E]">
+                  <div className="flex items-center justify-between gap-2 pb-3 mb-4 border-b border-white/10 text-xs">
+                    <span className="text-amber-300 font-semibold tracking-wide">
+                      Step 1 of 2: Indicative Cost Calculation
+                    </span>
+                    <span className="text-stone-300 text-[11px]">
+                      No commitment required
+                    </span>
+                  </div>
+
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/10">
                     <div>
-                      <span className="text-xs text-stone-400 font-medium uppercase tracking-wider block">
-                        Estimated Calculation Summary
+                      <span className="text-xs text-stone-300 font-medium block">
+                        Estimated Investment ({travelers} {travelers === 1 ? 'traveler' : 'travelers'})
                       </span>
                       <div className="flex items-baseline gap-2 mt-1">
-                        <span className="text-3xl sm:text-4xl font-black text-amber-300 font-mono">
+                        <span className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
                           {formatPrice(priceCalculation.totalEstimated)}
-                        </span>
-                        <span className="text-xs text-stone-400">
-                          (Total for {travelers} {travelers === 1 ? 'person' : 'people'})
                         </span>
                       </div>
                     </div>
 
                     <div className="sm:text-right">
-                      <span className="text-xs text-stone-400 block">Per Person Estimate</span>
-                      <span className="text-xl font-bold text-emerald-400 font-mono">
+                      <span className="text-xs text-stone-300 block">Per Person Base</span>
+                      <span className="text-xl font-bold text-emerald-300">
                         {formatPrice(priceCalculation.perPersonEstimated)}
                       </span>
-                      <span className="text-[11px] text-stone-400 block">all taxes & permits included</span>
+                      <span className="text-[11px] text-stone-400 block">All state permits & private transport included</span>
                     </div>
                   </div>
 
-                  <div className="pt-3 grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px] text-stone-400">
-                    <div>• Accommodation: {accommodationTier === 'deluxe' ? 'Deluxe 3-Star' : accommodationTier === 'luxury' ? 'Luxury Eco-Resort' : 'Standard Tier'}</div>
-                    <div>• Vehicle: {VEHICLE_TARIFFS.find(v => v.id === transportType)?.shortName || transportType} (Rs.{priceCalculation.selectedDailyRate.toLocaleString('en-IN')}/day)</div>
-                    <div>• Group Discount: {priceCalculation.groupDiscountPercent > 0 ? `${priceCalculation.groupDiscountPercent}% off` : 'Standard'}</div>
-                    <div>• Duration: {tour.durationDays} Days / {tour.durationNights} Nights</div>
+                  <div className="pt-3 grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px] text-stone-300">
+                    <div>• Stay: {accommodationTier === 'deluxe' ? 'Deluxe 3-Star' : accommodationTier === 'luxury' ? 'Luxury Eco-Resort' : 'Standard Tier'}</div>
+                    <div>• Vehicle: {VEHICLE_TARIFFS.find(v => v.id === transportType)?.shortName || transportType}</div>
+                    <div>• Discount: {priceCalculation.groupDiscountPercent > 0 ? `${priceCalculation.groupDiscountPercent}% group saving` : 'Direct Rate'}</div>
+                    <div>• Duration: {tour.durationDays}D / {tour.durationNights}N</div>
+                  </div>
+
+                  {/* Specialist Next Step Notice */}
+                  <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-xs text-stone-200">
+                    <span>
+                      <strong>Next Step:</strong> A designated route specialist in Guwahati will refine this with you within <span className="text-amber-300 font-bold">3 hours</span>.
+                    </span>
                   </div>
                 </div>
 
               </div>
 
-              {/* Booking & Inquiry Submission Form */}
+              {/* Booking & Inquiry Submission Form - Step 2 */}
               <div className="p-6 rounded-2xl border border-stone-200 bg-white shadow-xs">
                 {!bookingConfirmed ? (
                   <form onSubmit={handleSubmitInquiry} className="space-y-4">
                     <div className="flex items-center justify-between">
                       <div>
-                        <h4 className="text-base font-extrabold text-stone-900">
-                          Request Formal Quote & Booking Assistance
+                        <div className="text-xs text-emerald-800 font-semibold mb-0.5">
+                          Step 2: Specialist Itinerary Review & Direct Consultation
+                        </div>
+                        <h4 className="text-base font-bold text-stone-900">
+                          Connect With Your Dedicated Route Director
                         </h4>
                         <p className="text-xs text-stone-500">
-                          Submit your details for a confirmed slot and government permit processing.
+                          We review seasonal pass clearances, road conditions, and room allocations before finalizing your quote.
                         </p>
                       </div>
 
-                      <div className="hidden sm:flex items-center gap-1.5 text-xs text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full font-medium">
-                        <ShieldCheck className="w-3.5 h-3.5" />
-                        Zero booking fee to inquire
+                      <div className="hidden sm:flex items-center gap-1.5 text-xs text-stone-600 bg-stone-100 px-3 py-1 rounded-md font-medium">
+                        Guaranteed 3-hour response
                       </div>
                     </div>
 

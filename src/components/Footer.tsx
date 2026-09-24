@@ -101,15 +101,11 @@ export const Footer: React.FC<FooterProps> = ({
             <div className="pt-2 text-xs text-stone-400 space-y-1.5">
               <div className="flex items-center gap-2">
                 <MapPin className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                <span>Head Office: GS Road, Christian Basti, Guwahati, Assam 781005</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <MapPin className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                <span>Branch Office: Natun Bazar, Basistha, Guwahati, Assam 781029</span>
+                <span>Head Office: Natun Bazar, Basistha, Guwahati, Assam 781029</span>
               </div>
               <div className="flex items-center gap-2">
                 <Phone className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                <span>24x7 Traveler Hotline: +91 93951 09412 / +91 8095650076</span>
+                <span>24x7 Traveler Hotline: +91 93951 09412</span>
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="w-3.5 h-3.5 text-emerald-400 shrink-0" />

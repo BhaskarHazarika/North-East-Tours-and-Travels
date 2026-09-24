@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { 
   Compass, 
   Mountain, 
@@ -11,13 +11,9 @@ import {
   FileText,
   PhoneCall,
   Mail,
-  ArrowRight,
-  Car,
-  Building2
+  ArrowRight
 } from 'lucide-react';
 import { CAMERA_IMAGES } from '../assets/images';
-import { VehicleTariffCard } from '../components/VehicleTariffCard';
-import { HotelTariffCard } from '../components/HotelTariffCard';
 
 interface AboutViewProps {
   onOpenPermitGuide: () => void;
@@ -30,7 +26,6 @@ export const AboutView: React.FC<AboutViewProps> = ({
   onOpenCustomQuote,
   onNavigateToPackages
 }) => {
-  const [activeTariffTab, setActiveTariffTab] = useState<'vehicles' | 'hotels'>('vehicles');
   return (
     <div id="about-view" className="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
       
@@ -135,69 +130,17 @@ export const AboutView: React.FC<AboutViewProps> = ({
               <div className="w-12 h-12 rounded-xl bg-stone-100 text-stone-800 flex items-center justify-center mb-4">
                 <Mountain className="w-6 h-6 text-stone-700" />
               </div>
-              <h4 className="text-base font-bold text-stone-900 mb-2">Commercial Mountain Fleet & Transparent Tariffs</h4>
+              <h4 className="text-base font-bold text-stone-900 mb-2">Commercial Mountain Fleet & Dedicated Chauffeurs</h4>
               <p className="text-xs text-stone-600 leading-relaxed">
-                The frontier terrain requires reliable vehicles matched to road conditions. We operate a dedicated fleet of Sedans (Swift Dzire/Etios), rugged SUVs (Scorpio/Bolero/Xylo), Innovas, luxury Crystas, and 12-Seater Tempo Travellers with standardized regional daily tariffs.
+                The frontier terrain requires reliable vehicles matched to road conditions. We operate a dedicated fleet of Sedans (Swift Dzire/Etios), rugged SUVs (Scorpio/Bolero/Xylo), Innovas, luxury Crystas, and 12-Seater Tempo Travellers with licensed local hill chauffeurs included in all packages.
               </p>
             </div>
             <div className="mt-4 pt-3 border-t border-stone-100 text-[11px] font-semibold text-stone-800">
-              Experienced hill chauffeurs & transparent daily rates
+              Experienced hill chauffeurs & dedicated private vehicles
             </div>
           </div>
 
         </div>
-      </div>
-
-      {/* Official Commercial Tariffs & Rate Matrices */}
-      <div className="mb-16">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
-          <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold mb-2">
-              Published Commercial Tariffs
-            </div>
-            <h3 className="text-2xl sm:text-3xl font-black text-stone-900">
-              Fleet & Destination Accommodation Rate Cards
-            </h3>
-            <p className="text-xs sm:text-sm text-stone-600 mt-1 max-w-3xl">
-              We operate on 100% price transparency with land-only, ex-Guwahati quotes. Below are our published vehicle fleet daily rates and certified destination hotel room tariffs (Standard vs Deluxe 3-Star).
-            </p>
-          </div>
-
-          {/* Tab Selector */}
-          <div className="inline-flex p-1 bg-stone-100 rounded-xl border border-stone-200 shrink-0 self-start md:self-auto">
-            <button
-              type="button"
-              onClick={() => setActiveTariffTab('vehicles')}
-              className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                activeTariffTab === 'vehicles'
-                  ? 'bg-white text-stone-900 shadow-xs'
-                  : 'text-stone-600 hover:text-stone-900'
-              }`}
-            >
-              <Car className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Vehicle Fleet Rates</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveTariffTab('hotels')}
-              className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                activeTariffTab === 'hotels'
-                  ? 'bg-white text-stone-900 shadow-xs'
-                  : 'text-stone-600 hover:text-stone-900'
-              }`}
-            >
-              <Building2 className="w-3.5 h-3.5 text-blue-600" />
-              <span>Hotel Tariffs (Std vs 3-Star)</span>
-            </button>
-          </div>
-        </div>
-
-        {activeTariffTab === 'vehicles' ? (
-          <VehicleTariffCard />
-        ) : (
-          <HotelTariffCard />
-        )}
       </div>
 
       {/* Regional Operations & Base Offices */}
@@ -219,15 +162,7 @@ export const AboutView: React.FC<AboutViewProps> = ({
               <div className="p-3 rounded-xl bg-white/5 border border-white/10 flex items-start gap-3">
                 <MapPin className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
                 <div>
-                  <strong className="block text-white">Central Operations Hub — Guwahati, Assam</strong>
-                  <span className="text-stone-400">GS Road, Christian Basti (Close to LGBI International Airport & Railway Station)</span>
-                </div>
-              </div>
-
-              <div className="p-3 rounded-xl bg-white/5 border border-white/10 flex items-start gap-3">
-                <MapPin className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                <div>
-                  <strong className="block text-white">Operations & Logistics Branch — Guwahati, Assam</strong>
+                  <strong className="block text-white">Central Operations Hub & Head Office — Guwahati, Assam</strong>
                   <span className="text-stone-400">Natun Bazar, Basistha, Guwahati, Assam 781029</span>
                 </div>
               </div>

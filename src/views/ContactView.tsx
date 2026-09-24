@@ -124,7 +124,7 @@ ${notes ? `*Notes:* ${notes}` : ''}`;
     },
     {
       q: 'What type of vehicles do you use for hill roads?',
-      a: 'We operate an official fleet with transparent daily commercial tariffs: Sedan (Swift Dzire/Etios at ₹3,800/day for paved Meghalaya/Assam circuits), high-ground-clearance SUVs (Scorpio/Bolero/Xylo at ₹4,800/day for Assam/Meghalaya, ₹7,200/day for Arunachal), classic Innova (₹5,800–₹8,200/day), luxury Innova Crysta (₹6,500–₹9,000/day), and 12-Seater Tempo Travellers (₹7,800–₹10,800/day) for large groups. All vehicles include dedicated mountain drivers, interstate transport permits, fuel, and driver night allowances.'
+      a: 'We operate a dedicated commercial hill fleet comprising Sedans (Swift Dzire/Etios for paved Meghalaya/Assam circuits), high-ground-clearance SUVs (Scorpio/Bolero/Xylo), classic Innovas, luxury Innova Crystas, and 12-Seater Tempo Travellers for larger groups. Dedicated mountain chauffeurs, fuel, interstate transport permits, and driver overnight allowances are all included directly in your package amount.'
     }
   ];
 
@@ -319,10 +319,10 @@ ${notes ? `*Notes:* ${notes}` : ''}`;
                             )}
                           </div>
                           <div className="text-[11px] text-stone-500 mt-0.5">
-                            Capacity: {vehicle.seatingCapacity} seats • Rec: {vehicle.recommendedGroupSize} pax
+                            Capacity: {vehicle.seatingCapacity} seats • Rec: {vehicle.recommendedGroupLabel || `${vehicle.recommendedGroupSize} pax`}
                           </div>
-                          <div className="text-[11px] font-mono font-bold text-blue-700 mt-1">
-                            {dailyRate !== null ? `Rs.${dailyRate.toLocaleString('en-IN')}/day` : 'N/A in Arunachal'}
+                          <div className="text-[11px] font-medium text-emerald-700 mt-1">
+                            {isSedanInArunachal ? 'Pass-restricted in Arunachal' : 'Included in Package'}
                           </div>
                         </button>
                       );
@@ -424,7 +424,7 @@ ${notes ? `*Notes:* ${notes}` : ''}`;
           
           {/* Contact Details Card */}
           <div className="bg-stone-900 text-white rounded-3xl p-6 sm:p-7 border border-stone-800 shadow-sm">
-            <h3 className="text-lg font-bold text-white mb-4">North East Odyssey Head Offices</h3>
+            <h3 className="text-lg font-bold text-white mb-4">North East Odyssey Head Office</h3>
             
             <div className="space-y-4 text-xs text-stone-300">
               <div className="flex items-start gap-3">
@@ -432,17 +432,7 @@ ${notes ? `*Notes:* ${notes}` : ''}`;
                   <MapPin className="w-4 h-4" />
                 </div>
                 <div>
-                  <strong className="block text-white">Central Operations (Guwahati)</strong>
-                  <span className="text-stone-400">GS Road, Christian Basti, Guwahati, Assam 781005</span>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-lg bg-white/10 text-emerald-400 flex items-center justify-center shrink-0">
-                  <MapPin className="w-4 h-4" />
-                </div>
-                <div>
-                  <strong className="block text-white">Branch Office (Guwahati)</strong>
+                  <strong className="block text-white">Head Office (Guwahati)</strong>
                   <span className="text-stone-400">Natun Bazar, Basistha, Guwahati, Assam 781029</span>
                 </div>
               </div>
@@ -452,16 +442,11 @@ ${notes ? `*Notes:* ${notes}` : ''}`;
                   <Phone className="w-4 h-4" />
                 </div>
                 <div>
-                  <strong className="block text-white">24x7 Traveler Hotlines</strong>
+                  <strong className="block text-white">24x7 Traveler Hotline</strong>
                   <div className="text-stone-300 font-medium space-y-0.5 mt-0.5">
                     <div>
                       <a href="tel:+919395109412" className="hover:text-emerald-400 transition-colors">
                         +91 93951 09412
-                      </a>
-                    </div>
-                    <div>
-                      <a href="tel:+918095650076" className="hover:text-emerald-400 transition-colors">
-                        +91 8095650076
                       </a>
                     </div>
                   </div>

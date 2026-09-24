@@ -74,7 +74,7 @@ export interface TourPackage {
   nextDepartureDates: string[];
 }
 
-export type VehicleTypeId = 'sedan' | 'suv' | 'innova' | 'innova_crysta' | 'tempo_traveller';
+export type VehicleTypeId = 'sedan' | 'suv' | 'innova' | 'innova_crysta' | 'tempo_traveller' | 'urbania';
 export type AccommodationTierId = 'standard' | 'deluxe' | 'luxury' | 'comfort';
 
 export interface BookingInquiry {

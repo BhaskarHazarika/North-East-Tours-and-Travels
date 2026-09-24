@@ -109,9 +109,9 @@ export const VehicleTariffCard: React.FC<VehicleTariffCardProps> = ({
 
                   {/* Recommended Group Size */}
                   <td className="py-3.5 px-3 text-center">
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-stone-100 text-stone-800 font-mono font-bold text-xs">
-                      <Users className="w-3 h-3 text-stone-500" />
-                      {vehicle.recommendedGroupSize}
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-stone-100 text-stone-800 font-medium text-xs">
+                      <Users className="w-3 h-3 text-stone-500 shrink-0" />
+                      <span>{vehicle.recommendedGroupLabel || vehicle.recommendedGroupSize}</span>
                     </span>
                   </td>
 
@@ -119,9 +119,15 @@ export const VehicleTariffCard: React.FC<VehicleTariffCardProps> = ({
                   <td className={`py-3.5 px-4 text-right font-mono text-xs sm:text-sm ${
                     !isArunachalZone ? 'bg-emerald-50/40' : ''
                   }`}>
-                    <span className="font-extrabold text-blue-700">
-                      Rs.{vehicle.meghalayaAssamRatePerDay.toLocaleString('en-IN')}
-                    </span>
+                    {vehicle.meghalayaAssamRatePerDay !== null ? (
+                      <span className="font-extrabold text-blue-700">
+                        Rs.{vehicle.meghalayaAssamRatePerDay.toLocaleString('en-IN')}
+                      </span>
+                    ) : (
+                      <span className="font-bold text-stone-400">
+                        NA
+                      </span>
+                    )}
                   </td>
 
                   {/* Arunachal Zone Rate/day */}
@@ -133,9 +139,15 @@ export const VehicleTariffCard: React.FC<VehicleTariffCardProps> = ({
                         Rs.{vehicle.arunachalRatePerDay.toLocaleString('en-IN')}
                       </span>
                     ) : (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-bold bg-rose-100 text-rose-800 border border-rose-200">
-                        <AlertTriangle className="w-3 h-3 text-rose-600" />
-                        N/A
+                      <span className="font-bold text-stone-400">
+                        {vehicle.id === 'sedan' ? (
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-bold bg-rose-100 text-rose-800 border border-rose-200">
+                            <AlertTriangle className="w-3 h-3 text-rose-600" />
+                            N/A
+                          </span>
+                        ) : (
+                          'NA'
+                        )}
                       </span>
                     )}
                   </td>

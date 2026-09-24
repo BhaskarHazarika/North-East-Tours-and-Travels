@@ -24,8 +24,8 @@ export const PRICING_PRINCIPLES = [
     description: 'All packages are quoted land-only per person on twin-sharing (2 people per room), with private outstation vehicle, driver allowances, daily breakfast, and sightseeing/permits included. Flights/trains to Guwahati are offered as pass-through add-ons with zero inflated markups.'
   },
   {
-    title: 'Standard Commercial Vehicle Tariffs',
-    description: 'Every tour uses dedicated private vehicles governed by our official regional commercial tariff: Sedan (₹3,800/day for Meghalaya & Assam), SUV (₹4,800/day in Meghalaya & Assam, ₹7,200/day in Arunachal), Innova (₹5,800/day & ₹8,200/day), Innova Crysta (₹6,500/day & ₹9,000/day), and 12-Seater Tempo Traveller (₹7,800/day & ₹10,800/day). All rates include hill chauffeur, fuel, and night allowances.'
+    title: 'Dedicated Commercial Vehicles Included',
+    description: 'Every tour includes dedicated private vehicles with experienced local mountain chauffeurs, fuel, interstate transport permits, and driver night allowances built directly into your package amount.'
   },
   {
     title: 'Transparent "Starting From" & Category Grids',
