@@ -24,8 +24,6 @@ import { MainHighlightsSection } from '../components/MainHighlightsSection';
 import { SpecialFestivalsSection } from '../components/SpecialFestivalsSection';
 import { PackageFilterBar } from '../components/PackageFilterBar';
 import { TourCard } from '../components/TourCard';
-import { VehicleTariffCard } from '../components/VehicleTariffCard';
-import { HotelTariffCard } from '../components/HotelTariffCard';
 import { TOUR_PACKAGES } from '../data/packages';
 
 interface HomeViewProps {
@@ -52,7 +50,6 @@ export const HomeView: React.FC<HomeViewProps> = ({
   const [selectedState, setSelectedState] = useState<NorthEastState | 'All'>('All');
   const [selectedCategory, setSelectedCategory] = useState<TourCategory>('All');
   const [sortBy, setSortBy] = useState<'featured' | 'price-asc' | 'price-desc' | 'duration'>('featured');
-  const [vehicleZone, setVehicleZone] = useState<'meghalaya' | 'arunachal'>('meghalaya');
   const packagesRef = useRef<HTMLDivElement>(null);
 
   // Fallback to foundational catalog if dynamic list is not yet loaded
@@ -93,18 +90,29 @@ export const HomeView: React.FC<HomeViewProps> = ({
     }
   };
 
+  const handleScrollToMainHighlights = () => {
+    document.getElementById('main-highlights-section')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const handleScrollToFestivals = () => {
+    document.getElementById('special-festivals-section')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const handleSelectHighlightPackage = (packageId: string) => {
+    const pkg = packagesToDisplay.find(p => p.id === packageId) || TOUR_PACKAGES.find(p => p.id === packageId);
+    if (pkg) {
+      onSelectTour(pkg);
+    }
+  };
+
   return (
     <div id="home-view" className="w-full bg-[#FAF9F6] text-stone-900">
       
       {/* 1. Travel Agency Hero Section */}
       <Hero 
-        onSelectSpecial={onSelectSpecialTour}
-        selectedState={selectedState}
-        setSelectedState={(state) => {
-          setSelectedState(state);
-          handleExploreClick();
-        }}
-        onExploreClick={handleExploreClick}
+        onSelectHighlight={handleSelectHighlightPackage}
+        onExploreMainHighlights={handleScrollToMainHighlights}
+        onExploreFestivals={handleScrollToFestivals}
         onOpenCustomQuote={onOpenCustomQuote}
       />
 
@@ -195,200 +203,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
         </div>
       </section>
 
-      {/* 5. Dedicated Commercial Vehicle & Mountain Fleet Section */}
-      <section id="vehicle-fleet-section" className="py-16 sm:py-20 bg-stone-100 border-t border-b border-stone-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-10 gap-4">
-            <div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100 text-blue-900 text-xs font-bold uppercase tracking-wider mb-2 border border-blue-200">
-                <Car className="w-3.5 h-3.5 text-blue-700" />
-                <span>Private Transport & Hill Chauffeurs</span>
-              </div>
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-stone-950 tracking-tight">
-                Dedicated Commercial Vehicle & Mountain Fleet
-              </h2>
-              <p className="mt-2 text-stone-600 text-xs sm:text-sm max-w-2xl leading-relaxed">
-                Published daily commercial tariffs for dedicated private outstation vehicles. Every vehicle includes fuel, experienced mountain chauffeur, driver allowance, tolls, and parking.
-              </p>
-            </div>
-
-            {/* Circuit Selector Toggle */}
-            <div className="flex items-center gap-2 bg-white p-1.5 rounded-xl border border-stone-200 self-start lg:self-auto shadow-xs">
-              <button
-                onClick={() => setVehicleZone('meghalaya')}
-                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                  vehicleZone === 'meghalaya'
-                    ? 'bg-emerald-700 text-white shadow-xs'
-                    : 'text-stone-700 hover:bg-stone-100'
-                }`}
-              >
-                Meghalaya & Assam Circuit
-              </button>
-              <button
-                onClick={() => setVehicleZone('arunachal')}
-                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                  vehicleZone === 'arunachal'
-                    ? 'bg-amber-600 text-white shadow-xs'
-                    : 'text-stone-700 hover:bg-stone-100'
-                }`}
-              >
-                Arunachal Frontier Circuit
-              </button>
-            </div>
-          </div>
-
-          {/* Quick Rate Cards Summary */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-8">
-            <div className="bg-white p-3.5 rounded-xl border border-stone-200 shadow-xs">
-              <span className="text-[10px] font-bold text-stone-400 uppercase tracking-wider block">Sedan</span>
-              <span className="text-xs font-bold text-stone-800 block mt-0.5">Swift Dzire / Etios</span>
-              <div className="mt-2 pt-2 border-t border-stone-100">
-                <div className="font-mono text-sm font-black text-emerald-800">
-                  ₹3,800 <span className="text-[10px] font-normal text-stone-500">/day</span>
-                </div>
-                <span className="text-[10px] text-stone-500 block">Meghalaya & Assam</span>
-                <span className="text-[10px] text-amber-700 font-semibold block mt-0.5">Rec: 2 Guests</span>
-              </div>
-            </div>
-
-            <div className="bg-white p-3.5 rounded-xl border border-stone-200 shadow-xs">
-              <span className="text-[10px] font-bold text-stone-400 uppercase tracking-wider block">SUV</span>
-              <span className="text-xs font-bold text-stone-800 block mt-0.5">Ertiga / Innova</span>
-              <div className="mt-2 pt-2 border-t border-stone-100">
-                <div className="font-mono text-sm font-black text-emerald-800">
-                  {vehicleZone === 'meghalaya' ? '₹4,800' : '₹5,300'} <span className="text-[10px] font-normal text-stone-500">/day</span>
-                </div>
-                <span className="text-[10px] text-stone-500 block">
-                  {vehicleZone === 'meghalaya' ? 'Meghalaya circuit' : 'Arunachal circuit'}
-                </span>
-                <span className="text-[10px] text-emerald-700 font-semibold block mt-0.5">Rec: 3 Guests</span>
-              </div>
-            </div>
-
-            <div className="bg-white p-3.5 rounded-xl border border-stone-200 shadow-xs">
-              <span className="text-[10px] font-bold text-stone-400 uppercase tracking-wider block">7-Seater</span>
-              <span className="text-xs font-bold text-stone-800 block mt-0.5">Toyota Innova</span>
-              <div className="mt-2 pt-2 border-t border-stone-100">
-                <div className="font-mono text-sm font-black text-emerald-800">
-                  {vehicleZone === 'meghalaya' ? '₹5,000' : '₹5,500'} <span className="text-[10px] font-normal text-stone-500">/day</span>
-                </div>
-                <span className="text-[10px] text-stone-500 block">
-                  {vehicleZone === 'meghalaya' ? 'Meghalaya circuit' : 'Arunachal circuit'}
-                </span>
-                <span className="text-[10px] text-emerald-700 font-semibold block mt-0.5">Rec: 4 Guests</span>
-              </div>
-            </div>
-
-            <div className="bg-white p-3.5 rounded-xl border-2 border-emerald-600/60 shadow-xs relative">
-              <span className="absolute -top-2.5 right-2 bg-emerald-700 text-white text-[8px] font-extrabold uppercase px-1.5 py-0.5 rounded-full">
-                Popular
-              </span>
-              <span className="text-[10px] font-bold text-emerald-700 uppercase tracking-wider block">Premium SUV</span>
-              <span className="text-xs font-bold text-stone-800 block mt-0.5">Innova Crysta</span>
-              <div className="mt-2 pt-2 border-t border-stone-100">
-                <div className="font-mono text-sm font-black text-emerald-800">
-                  {vehicleZone === 'meghalaya' ? '₹5,500' : '₹6,000'} <span className="text-[10px] font-normal text-stone-500">/day</span>
-                </div>
-                <span className="text-[10px] text-stone-500 block">
-                  {vehicleZone === 'meghalaya' ? 'Meghalaya circuit' : 'Arunachal circuit'}
-                </span>
-                <span className="text-[10px] text-emerald-700 font-semibold block mt-0.5">Rec: 5 Guests</span>
-              </div>
-            </div>
-
-            <div className="bg-white p-3.5 rounded-xl border border-stone-200 shadow-xs">
-              <span className="text-[10px] font-bold text-stone-400 uppercase tracking-wider block">Group Van</span>
-              <span className="text-xs font-bold text-stone-800 block mt-0.5">Tempo (12-Seater)</span>
-              <div className="mt-2 pt-2 border-t border-stone-100">
-                <div className="font-mono text-sm font-black text-emerald-800">
-                  {vehicleZone === 'meghalaya' ? '₹8,000' : '₹9,000'} <span className="text-[10px] font-normal text-stone-500">/day</span>
-                </div>
-                <span className="text-[10px] text-stone-500 block">
-                  {vehicleZone === 'meghalaya' ? 'Meghalaya circuit' : 'Arunachal circuit'}
-                </span>
-                <span className="text-[10px] text-emerald-700 font-semibold block mt-0.5">Rec: 6 (Budget tier)</span>
-              </div>
-            </div>
-
-            <div className="bg-white p-3.5 rounded-xl border border-stone-200 shadow-xs">
-              <span className="text-[10px] font-bold text-stone-400 uppercase tracking-wider block">Luxury Van</span>
-              <span className="text-xs font-bold text-stone-800 block mt-0.5">Urbania (12-Seater)</span>
-              <div className="mt-2 pt-2 border-t border-stone-100">
-                <div className="font-mono text-sm font-black text-emerald-800">
-                  {vehicleZone === 'meghalaya' ? '₹10,000' : '₹11,000'} <span className="text-[10px] font-normal text-stone-500">/day</span>
-                </div>
-                <span className="text-[10px] text-stone-500 block">
-                  {vehicleZone === 'meghalaya' ? 'Meghalaya circuit' : 'Arunachal circuit'}
-                </span>
-                <span className="text-[10px] text-emerald-700 font-semibold block mt-0.5">Rec: 6 (Standard/Deluxe)</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Detailed Tariff Table Card */}
-          <VehicleTariffCard 
-            isArunachalZone={vehicleZone === 'arunachal'}
-            onSelectVehicle={() => onOpenCustomQuote()}
-          />
-
-          {/* Vehicle Booking Actions */}
-          <div className="mt-8 flex flex-col sm:flex-row items-center justify-between p-6 rounded-2xl bg-stone-900 text-white gap-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-400/30">
-                <ShieldCheck className="w-5 h-5" />
-              </div>
-              <div>
-                <h4 className="text-sm font-bold text-white">Need a Dedicated Vehicle for a Custom Circuit?</h4>
-                <p className="text-xs text-stone-300 mt-0.5">
-                  Book outstation vehicle charters ex-Guwahati with senior mountain drivers for any number of days.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-3 shrink-0">
-              <button
-                onClick={onOpenCustomQuote}
-                className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-all cursor-pointer shadow-xs"
-              >
-                Inquire Fleet & Charter
-              </button>
-              <a
-                href="https://wa.me/919395109412?text=Hi%20North%20East%20Odyssey%2C%20I%20would%20like%20to%20inquire%20about%20booking%20a%20dedicated%20vehicle%20and%20driver."
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-all flex items-center gap-1.5"
-              >
-                <MessageCircle className="w-4 h-4 text-[#25D366]" />
-                <span>WhatsApp Fleet Desk</span>
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 6. Destination Hotel Tariffs (Standard vs Deluxe 3-Star) */}
-      <section id="hotel-tariffs-section" className="py-16 sm:py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-8">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100 text-blue-900 text-xs font-bold uppercase tracking-wider mb-2 border border-blue-200">
-            <Building2 className="w-3.5 h-3.5 text-blue-700" />
-            <span>Accommodation Transparency</span>
-          </div>
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-stone-950 tracking-tight">
-            Official Destination Hotel Tariffs
-          </h2>
-          <p className="mt-2 text-stone-600 text-xs sm:text-sm max-w-2xl leading-relaxed">
-            Standardized per-room nightly rates across key North East transit and highland stations on twin-sharing basis with breakfast.
-          </p>
-        </div>
-
-        <HotelTariffCard 
-          onSelectDestination={(dest) => {
-            onNavigate('packages');
-          }}
-        />
-      </section>
-
-      {/* 7. Travel Agency Guarantees & Why Book With Us */}
+      {/* 5. Travel Agency Guarantees & Why Book With Us */}
       <section className="py-16 sm:py-20 bg-white border-t border-stone-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-14">
